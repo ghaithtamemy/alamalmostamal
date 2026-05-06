@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>عالم المستعمل – متجر الإلكترونيات الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0a0a0f;
+  --surface:#13131a;
+  --surface2:#1c1c26;
+  --border:#2a2a3d;
+  --accent:#6c63ff;
+  --accent2:#ff6584;
+  --gold:#ffd700;
+  --text:#e8e8f0;
+  --muted:#7a7a9a;
+  --radius:14px;
+  --glow:0 0 30px rgba(108,99,255,0.25);
+}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);direction:rtl;min-height:100vh;overflow-x:hidden}
+
+/* ANIMATED BG */
+body::before{
+  content:'';position:fixed;inset:0;
+  background:radial-gradient(ellipse at 20% 20%,rgba(108,99,255,0.08) 0%,transparent 60%),
+             radial-gradient(ellipse at 80% 80%,rgba(255,101,132,0.06) 0%,transparent 60%);
+  pointer-events:none;z-index:0;
+}
+
+/* NAV */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:rgba(10,10,15,0.85);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:68px;
+}
+.logo{font-size:1.25rem;font-weight:900;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:8px}
+.logo-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;box-shadow:0 0 12px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(1.3)}}
+.nav-links{display:flex;gap:1.5rem;list-style:none}
+.nav-links a{color:var(--muted);text-decoration:none;font-size:0.9rem;font-weight:600;transition:color 0.2s}
+.nav-links a:hover{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:1rem}
+.ai-badge{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;padding:0.4rem 1rem;border-radius:50px;
+  font-size:0.8rem;font-weight:700;cursor:pointer;border:none;
+  box-shadow:var(--glow);transition:transform 0.2s;
+}
+.ai-badge:hover{transform:scale(1.05)}
+.cart-btn{
+  background:var(--surface2);border:1px solid var(--border);
+  color:var(--text);padding:0.4rem 1rem;border-radius:50px;
+  font-family:'Cairo',sans-serif;font-size:0.85rem;font-weight:600;
+  cursor:pointer;transition:border-color 0.2s;
+}
+.cart-btn:hover{border-color:var(--accent)}
+
+/* HERO */
+.hero{
+  position:relative;z-index:1;
+  padding:5rem 2rem 4rem;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:1.5rem;
+}
+.hero-tag{
+  display:inline-flex;align-items:center;gap:6px;
+  background:rgba(108,99,255,0.12);border:1px solid rgba(108,99,255,0.3);
+  color:var(--accent);padding:0.4rem 1rem;border-radius:50px;
+  font-size:0.8rem;font-weight:700;
+}
+.hero h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:900;line-height:1.15;max-width:700px}
+.hero h1 .grad{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.hero p{color:var(--muted);font-size:1.05rem;max-width:500px;line-height:1.8}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;margin-top:0.5rem}
+.btn-glow{
+  background:linear-gradient(135deg,var(--accent),#8b85ff);
+  color:#fff;padding:0.85rem 2rem;border-radius:50px;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:1rem;
+  border:none;cursor:pointer;box-shadow:var(--glow);
+  transition:transform 0.2s,box-shadow 0.2s;text-decoration:none;display:inline-block;
+}
+.btn-glow:hover{transform:translateY(-2px);box-shadow:0 0 40px rgba(108,99,255,0.4)}
+.btn-ghost{
+  background:transparent;color:var(--text);
+  padding:0.85rem 2rem;border-radius:50px;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:1rem;
+  border:1px solid var(--border);cursor:pointer;
+  transition:border-color 0.2s,background 0.2s;text-decoration:none;display:inline-block;
+}
+.btn-ghost:hover{border-color:var(--accent);background:rgba(108,99,255,0.08)}
+
+/* STATS */
+.stats{display:flex;gap:3rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}
+.stat-item{text-align:center}
+.stat-n{font-size:2rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-l{font-size:0.78rem;color:var(--muted);margin-top:2px}
+
+/* AI SEARCH */
+.search-wrap{
+  position:relative;z-index:1;
+  max-width:700px;margin:0 auto;padding:0 2rem 3rem;
+}
+.search-box{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.2rem 1.5rem;
+  display:flex;align-items:center;gap:1rem;
+  transition:border-color 0.3s,box-shadow 0.3s;
+}
+.search-box:focus-within{border-color:var(--accent);box-shadow:var(--glow)}
+.search-icon{font-size:1.1rem;opacity:0.5}
+.search-input{
+  flex:1;background:transparent;border:none;outline:none;
+  color:var(--text);font-family:'Cairo',sans-serif;font-size:0.95rem;
+}
+.search-input::placeholder{color:var(--muted)}
+.search-btn{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;padding:0.5rem 1.2rem;border-radius:8px;
+  font-family:'Cairo',sans-serif;font-weight:700;font-size:0.85rem;
+  cursor:pointer;transition:opacity 0.2s;white-space:nowrap;
+}
+.search-btn:hover{opacity:0.88}
+.search-results{
+  margin-top:0.75rem;background:var(--surface);
+  border:1px solid var(--border);border-radius:var(--radius);
+  padding:1rem;display:none;
+}
+.search-results.active{display:block}
+.search-result-text{color:var(--text);font-size:0.9rem;line-height:1.8}
+
+/* CATEGORIES */
+.section{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:3rem 2rem}
+.section-head{text-align:center;margin-bottom:2rem}
+.section-tag{
+  display:inline-block;background:rgba(108,99,255,0.1);
+  color:var(--accent);padding:0.3rem 0.9rem;border-radius:50px;
+  font-size:0.78rem;font-weight:700;margin-bottom:0.6rem;
+  border:1px solid rgba(108,99,255,0.2);
+}
+.section-head h2{font-size:1.8rem;font-weight:900}
+.section-head p{color:var(--muted);font-size:0.9rem;margin-top:0.3rem}
+
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:0.8rem}
+.cat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.4rem 1rem;
+  text-align:center;cursor:pointer;
+  transition:all 0.25s;text-decoration:none;color:var(--text);
+}
+.cat:hover{border-color:var(--accent);background:rgba(108,99,255,0.08);transform:translateY(-3px)}
+.cat-em{font-size:1.8rem;display:block;margin-bottom:0.5rem}
+.cat-name{font-weight:700;font-size:0.85rem}
+.cat-n{font-size:0.72rem;color:var(--muted);margin-top:2px}
+
+/* PRODUCTS */
+.products-bg{background:var(--surface);position:relative;z-index:1;padding:3rem 0}
+.prods{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:1rem;max-width:1100px;margin:0 auto;padding:0 2rem}
+.prod-card{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  transition:all 0.3s;cursor:pointer;
+}
+.prod-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--glow)}
+.prod-img{
+  height:155px;background:var(--surface2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:3.2rem;position:relative;
+}
+.prod-badge{
+  position:absolute;top:10px;right:10px;
+  font-size:0.68rem;font-weight:700;padding:3px 9px;border-radius:50px;
+}
+.badge-used{background:rgba(108,99,255,0.2);color:#a09dff;border:1px solid rgba(108,99,255,0.3)}
+.badge-sale{background:rgba(255,101,132,0.2);color:#ff8fa3;border:1px solid rgba(255,101,132,0.3);left:10px;right:auto}
+.prod-info{padding:1rem}
+.prod-cond{font-size:0.72rem;color:var(--muted);margin-bottom:3px}
+.prod-name{font-weight:700;font-size:0.9rem;line-height:1.4;margin-bottom:4px}
+.prod-stars{color:var(--gold);font-size:0.78rem;margin-bottom:0.5rem}
+.prod-price{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.75rem}
+.price-new{font-size:1.05rem;font-weight:900;color:var(--accent)}
+.price-old{font-size:0.78rem;color:var(--muted);text-decoration:line-through}
+.add-btn{
+  width:100%;padding:0.55rem;border-radius:8px;
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);font-family:'Cairo',sans-serif;
+  font-weight:700;font-size:0.85rem;cursor:pointer;transition:all 0.2s;
+}
+.add-btn:hover{background:var(--accent);border-color:var(--accent);color:#fff}
+
+/* AI ASSISTANT */
+.ai-section{
+  position:relative;z-index:1;
+  max-width:1100px;margin:0 auto;padding:3rem 2rem;
+}
+.ai-container{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;overflow:hidden;
+  box-shadow:var(--glow);
+}
+.ai-header{
+  background:linear-gradient(135deg,rgba(108,99,255,0.15),rgba(255,101,132,0.1));
+  padding:1.5rem 2rem;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:1rem;
+}
+.ai-avatar{
+  width:44px;height:44px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;box-shadow:var(--glow);flex-shrink:0;
+}
+.ai-title{font-weight:700;font-size:1rem}
+.ai-sub{font-size:0.78rem;color:var(--muted);display:flex;align-items:center;gap:5px}
+.online-dot{width:6px;height:6px;background:#22c55e;border-radius:50%;animation:pulse 2s infinite}
+.ai-chat{height:340px;overflow-y:auto;padding:1.5rem;display:flex;flex-direction:column;gap:1rem;scroll-behavior:smooth}
+.ai-chat::-webkit-scrollbar{width:4px}
+.ai-chat::-webkit-scrollbar-track{background:transparent}
+.ai-chat::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.msg{max-width:80%;animation:fadeUp 0.3s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.msg-ai{align-self:flex-start}
+.msg-user{align-self:flex-end}
+.msg-bubble{
+  padding:0.85rem 1.1rem;border-radius:16px;
+  font-size:0.88rem;line-height:1.7;
+}
+.msg-ai .msg-bubble{
+  background:var(--surface2);border:1px solid var(--border);
+  border-bottom-right-radius:4px;color:var(--text);
+}
+.msg-user .msg-bubble{
+  background:linear-gradient(135deg,var(--accent),#8b85ff);
+  color:#fff;border-bottom-left-radius:4px;
+}
+.msg-time{font-size:0.68rem;color:var(--muted);margin-top:4px;padding:0 4px}
+.msg-user .msg-time{text-align:left}
+.typing{display:flex;gap:5px;align-items:center;padding:0.85rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:16px;border-bottom-right-radius:4px;width:fit-content}
+.typing span{width:7px;height:7px;background:var(--muted);border-radius:50%;animation:bounce 1.2s infinite}
+.typing span:nth-child(2){animation-delay:0.2s}
+.typing span:nth-child(3){animation-delay:0.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-7px)}}
+.ai-input-area{
+  padding:1rem 1.5rem;border-top:1px solid var(--border);
+  display:flex;gap:0.75rem;align-items:center;
+  background:rgba(0,0,0,0.2);
+}
+.ai-input{
+  flex:1;background:var(--surface2);border:1px solid var(--border);
+  border-radius:10px;padding:0.65rem 1rem;
+  color:var(--text);font-family:'Cairo',sans-serif;font-size:0.88rem;outline:none;
+  transition:border-color 0.2s;
+}
+.ai-input:focus{border-color:var(--accent)}
+.ai-input::placeholder{color:var(--muted)}
+.send-btn{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border:none;padding:0.65rem 1.2rem;
+  border-radius:10px;font-family:'Cairo',sans-serif;
+  font-weight:700;font-size:0.85rem;cursor:pointer;
+  transition:opacity 0.2s;white-space:nowrap;
+}
+.send-btn:hover{opacity:0.88}
+.send-btn:disabled{opacity:0.4;cursor:not-allowed}
+.quick-btns{padding:0 1.5rem 1rem;display:flex;gap:0.5rem;flex-wrap:wrap}
+.quick-btn{
+  background:rgba(108,99,255,0.1);border:1px solid rgba(108,99,255,0.25);
+  color:var(--accent);padding:0.3rem 0.8rem;border-radius:50px;
+  font-family:'Cairo',sans-serif;font-size:0.78rem;font-weight:600;
+  cursor:pointer;transition:all 0.2s;
+}
+.quick-btn:hover{background:rgba(108,99,255,0.2)}
+
+/* WHY */
+.why-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.why-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.6rem 1.4rem;
+  transition:border-color 0.2s;
+}
+.why-card:hover{border-color:var(--accent)}
+.why-icon{font-size:1.8rem;margin-bottom:0.8rem;display:block}
+.why-card h3{font-weight:700;font-size:0.95rem;margin-bottom:0.4rem}
+.why-card p{font-size:0.83rem;color:var(--muted);line-height:1.7}
+
+/* REVIEWS */
+.reviews-bg{background:var(--surface);position:relative;z-index:1;padding:3rem 0}
+.reviews-inner{max-width:1100px;margin:0 auto;padding:0 2rem}
+.reviews-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
+.review{
+  background:var(--bg);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.4rem;
+  transition:border-color 0.2s;
+}
+.review:hover{border-color:var(--accent)}
+.rev-stars{color:var(--gold);font-size:0.85rem;margin-bottom:0.6rem}
+.rev-text{font-size:0.87rem;color:var(--muted);line-height:1.8;margin-bottom:1rem}
+.reviewer{display:flex;align-items:center;gap:0.7rem}
+.rev-av{
+  width:36px;height:36px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:0.85rem;color:#fff;flex-shrink:0;
+}
+.rev-name{font-weight:700;font-size:0.85rem}
+.rev-city{font-size:0.72rem;color:var(--muted)}
+
+/* CTA */
+.cta-wrap{
+  position:relative;z-index:1;
+  padding:4rem 2rem;text-align:center;
+}
+.cta-box{
+  max-width:600px;margin:0 auto;
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:20px;padding:3rem 2rem;
+  box-shadow:var(--glow);
+}
+.cta-box h2{font-size:2rem;font-weight:900;margin-bottom:0.5rem}
+.cta-box p{color:var(--muted);margin-bottom:1.5rem}
+
+/* FOOTER */
+footer{
+  background:var(--surface);border-top:1px solid var(--border);
+  padding:3rem 2rem 1.5rem;position:relative;z-index:1;
+}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:2rem;max-width:1100px;margin:0 auto 2rem}
+.footer-brand h3{font-size:1.1rem;font-weight:900;margin-bottom:0.5rem}
+.footer-brand p{font-size:0.83rem;color:var(--muted);line-height:1.8}
+.footer-col h4{font-weight:700;font-size:0.9rem;margin-bottom:0.8rem}
+.footer-col ul{list-style:none}
+.footer-col li{margin-bottom:0.4rem}
+.footer-col a{color:var(--muted);text-decoration:none;font-size:0.83rem;transition:color 0.2s}
+.footer-col a:hover{color:var(--accent)}
+.footer-bottom{text-align:center;font-size:0.78rem;color:var(--muted);border-top:1px solid var(--border);max-width:1100px;margin:0 auto;padding-top:1.2rem}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--accent);color:#fff;padding:0.75rem 1.5rem;
+  border-radius:50px;font-weight:700;font-size:0.9rem;
+  transition:transform 0.3s;z-index:999;white-space:nowrap;
+}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+@media(max-width:768px){
+  .nav-links{display:none}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .stats{gap:1.5rem}
+}
+@media(max-width:480px){
+  .footer-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast">✅ تمت الإضافة للسلة!</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo"><span class="logo-dot"></span>عالم المستعمل</a>
+  <ul class="nav-links">
+    <li><a href="#">الرئيسية</a></li>
+    <li><a href="#">المتجر</a></li>
+    <li><a href="#">الموبايلات</a></li>
+    <li><a href="#">اللابتوبات</a></li>
+    <li><a href="#">من نحن</a></li>
+    <li><a href="#">تواصل</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="ai-badge" onclick="document.getElementById('ai-section').scrollIntoView({behavior:'smooth'})">🤖 مساعد ذكي</button>
+    <button class="cart-btn">🛒 السلة <span id="cart-count">0</span></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-tag">🤖 مدعوم بالذكاء الاصطناعي</div>
+  <h1>متجرك الذكي<br/>للإلكترونيات <span class="grad">المستعملة</span></h1>
+  <p>أجهزة مفحوصة ومضمونة بأفضل الأسعار — واسأل مساعدنا الذكي عن أي جهاز</p>
+  <div class="hero-btns">
+    <a href="#products" class="btn-glow">🛍️ تسوق الآن</a>
+    <a href="#ai-section" class="btn-ghost">🤖 جرب المساعد الذكي</a>
+  </div>
+  <div class="stats">
+    <div class="stat-item"><div class="stat-n">+500</div><div class="stat-l">منتج متاح</div></div>
+    <div class="stat-item"><div class="stat-n">+1000</div><div class="stat-l">عميل راضٍ</div></div>
+    <div class="stat-item"><div class="stat-n">100%</div><div class="stat-l">جودة مضمونة</div></div>
+    <div class="stat-item"><div class="stat-n">3</div><div class="stat-l">سنوات خبرة</div></div>
+  </div>
+</div>
+
+<!-- AI SMART SEARCH -->
+<div class="search-wrap">
+  <div class="search-box">
+    <span class="search-icon">🔍</span>
+    <input class="search-input" id="searchInput" type="text" placeholder="ابحث بالذكاء الاصطناعي... مثال: موبايل بسعر أقل من 400 ألف"/>
+    <button class="search-btn" onclick="doSearch()">بحث ذكي</button>
+  </div>
+  <div class="search-results" id="searchResults">
+    <div class="search-result-text" id="searchText"></div>
+  </div>
+</div>
+
+<!-- CATEGORIES -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-tag">الفئات</span>
+    <h2>تسوق حسب الفئة</h2>
+    <p>اختر من أوسع تشكيلة إلكترونيات مستعملة في البصرة</p>
+  </div>
+  <div class="cats">
+    <a href="#" class="cat"><span class="cat-em">📱</span><div class="cat-name">موبايلات</div><div class="cat-n">+120 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">💻</span><div class="cat-name">لابتوبات</div><div class="cat-n">+80 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">🖥️</span><div class="cat-name">كمبيوتر</div><div class="cat-n">+40 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">🎧</span><div class="cat-name">سماعات</div><div class="cat-n">+60 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">📷</span><div class="cat-name">كاميرات</div><div class="cat-n">+30 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">🖨️</span><div class="cat-name">طابعات</div><div class="cat-n">+25 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">🎮</span><div class="cat-name">ألعاب</div><div class="cat-n">+35 منتج</div></a>
+    <a href="#" class="cat"><span class="cat-em">🔌</span><div class="cat-name">إكسسوارات</div><div class="cat-n">+150 منتج</div></a>
+  </div>
+</section>
+
+<!-- PRODUCTS -->
+<div class="products-bg" id="products">
+  <div style="max-width:1100px;margin:0 auto;padding:0 2rem">
+    <div class="section-head">
+      <span class="section-tag">منتجات مميزة</span>
+      <h2>اختيارات بعناية لك</h2>
+      <p>كل جهاز مفحوص ومضمون — جودة لا تقبل المساومة</p>
+    </div>
+  </div>
+  <div class="prods">
+    <div class="prod-card">
+      <div class="prod-img">📱<span class="prod-badge badge-used">مستعمل</span><span class="prod-badge badge-sale">خصم 20%</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة ممتازة</div>
+        <div class="prod-name">iPhone 13 — 128GB</div>
+        <div class="prod-stars">★★★★★ (24)</div>
+        <div class="prod-price"><span class="price-new">550,000 د.ع</span><span class="price-old">690,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+    <div class="prod-card">
+      <div class="prod-img">💻<span class="prod-badge badge-used">مستعمل</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة جيدة جداً</div>
+        <div class="prod-name">Dell Latitude 5510 i5</div>
+        <div class="prod-stars">★★★★☆ (17)</div>
+        <div class="prod-price"><span class="price-new">380,000 د.ع</span><span class="price-old">500,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+    <div class="prod-card">
+      <div class="prod-img">🎧<span class="prod-badge badge-used">مستعمل</span><span class="prod-badge badge-sale">خصم 15%</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة ممتازة</div>
+        <div class="prod-name">Sony WH-1000XM4</div>
+        <div class="prod-stars">★★★★★ (41)</div>
+        <div class="prod-price"><span class="price-new">180,000 د.ع</span><span class="price-old">210,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+    <div class="prod-card">
+      <div class="prod-img">📱<span class="prod-badge badge-used">مستعمل</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة جيدة</div>
+        <div class="prod-name">Samsung Galaxy S22</div>
+        <div class="prod-stars">★★★★☆ (19)</div>
+        <div class="prod-price"><span class="price-new">420,000 د.ع</span><span class="price-old">520,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+    <div class="prod-card">
+      <div class="prod-img">💻<span class="prod-badge badge-used">مستعمل</span><span class="prod-badge badge-sale">خصم 25%</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة ممتازة</div>
+        <div class="prod-name">MacBook Air M1</div>
+        <div class="prod-stars">★★★★★ (33)</div>
+        <div class="prod-price"><span class="price-new">750,000 د.ع</span><span class="price-old">1,000,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+    <div class="prod-card">
+      <div class="prod-img">📷<span class="prod-badge badge-used">مستعمل</span></div>
+      <div class="prod-info">
+        <div class="prod-cond">حالة جيدة جداً</div>
+        <div class="prod-name">Canon EOS 250D</div>
+        <div class="prod-stars">★★★★☆ (12)</div>
+        <div class="prod-price"><span class="price-new">320,000 د.ع</span><span class="price-old">450,000</span></div>
+        <button class="add-btn" onclick="addCart(this)">أضف للسلة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI ASSISTANT -->
+<div class="ai-section" id="ai-section">
+  <div class="section-head">
+    <span class="section-tag">🤖 ذكاء اصطناعي</span>
+    <h2>مساعدك الذكي للتسوق</h2>
+    <p>اسأل عن أي جهاز، قارن الأسعار، أو احصل على توصية مخصصة لك</p>
+  </div>
+  <div class="ai-container">
+    <div class="ai-header">
+      <div class="ai-avatar">🤖</div>
+      <div>
+        <div class="ai-title">مساعد عالم المستعمل الذكي</div>
+        <div class="ai-sub"><span class="online-dot"></span> متصل الآن — يعمل بالذكاء الاصطناعي</div>
+      </div>
+    </div>
+    <div class="ai-chat" id="aiChat">
+      <div class="msg msg-ai">
+        <div class="msg-bubble">مرحباً! 👋 أنا مساعدك الذكي في عالم المستعمل.<br/>يمكنني مساعدتك في:<br/>• اختيار أفضل جهاز حسب ميزانيتك<br/>• مقارنة المواصفات بين الأجهزة<br/>• الإجابة على أسئلتك عن الأجهزة المستعملة<br/><br/>بماذا يمكنني مساعدتك اليوم؟</div>
+        <div class="msg-time">الآن</div>
+      </div>
+    </div>
+    <div class="quick-btns">
+      <button class="quick-btn" onclick="quickAsk('ما أفضل موبايل بأقل من 400 ألف دينار؟')">📱 موبايل رخيص</button>
+      <button class="quick-btn" onclick="quickAsk('أريد لابتوب للدراسة بسعر مناسب')">💻 لابتوب للدراسة</button>
+      <button class="quick-btn" onclick="quickAsk('ما الفرق بين iPhone وSamsung من حيث الجودة؟')">⚖️ مقارنة أجهزة</button>
+      <button class="quick-btn" onclick="quickAsk('كيف أتحقق من جودة الجهاز المستعمل؟')">🔍 نصائح الشراء</button>
+    </div>
+    <div class="ai-input-area">
+      <input class="ai-input" id="aiInput" placeholder="اكتب سؤالك هنا..." onkeydown="if(event.key==='Enter')sendMsg()"/>
+      <button class="send-btn" id="sendBtn" onclick="sendMsg()">إرسال ✈</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHY US -->
+<section class="section">
+  <div class="section-head">
+    <span class="section-tag">لماذا نحن؟</span>
+    <h2>ثق بعالم المستعمل</h2>
+  </div>
+  <div class="why-grid">
+    <div class="why-card"><span class="why-icon">🔍</span><h3>فحص دقيق لكل جهاز</h3><p>كل منتج يمر بفحص شامل قبل عرضه — لضمان جودة لا تقبل المساومة</p></div>
+    <div class="why-card"><span class="why-icon">💰</span><h3>أفضل سعر مضمون</h3><p>وفر أكثر من 40% مقارنة بالسعر الأصلي مع ضمان الجودة</p></div>
+    <div class="why-card"><span class="why-icon">🛡️</span><h3>ضمان ما بعد البيع</h3><p>إمكانية الإرجاع والاستبدال خلال 7 أيام من الاستلام</p></div>
+    <div class="why-card"><span class="why-icon">🤖</span><h3>مساعد ذكي 24/7</h3><p>مساعدنا بالذكاء الاصطناعي جاهز للإجابة على أسئلتك في أي وقت</p></div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<div class="reviews-bg">
+  <div class="reviews-inner">
+    <div class="section-head">
+      <span class="section-tag">آراء العملاء</span>
+      <h2>ماذا قالوا عنا؟</h2>
+    </div>
+    <div class="reviews-grid">
+      <div class="review"><div class="rev-stars">★★★★★</div><div class="rev-text">اشتريت آيفون 13 وكان بحالة ممتازة وكأنه جديد، والمساعد الذكي ساعدني في الاختيار!</div><div class="reviewer"><div class="rev-av">أح</div><div><div class="rev-name">أحمد الحسن</div><div class="rev-city">البصرة</div></div></div></div>
+      <div class="review"><div class="rev-stars">★★★★★</div><div class="rev-text">خدمة ممتازة وأمانة عالية، اشتريت لابتوب وكان مطابق للوصف تماماً. أنصح الجميع!</div><div class="reviewer"><div class="rev-av">سم</div><div><div class="rev-name">سارة محمد</div><div class="rev-city">البصرة</div></div></div></div>
+      <div class="review"><div class="rev-stars">★★★★☆</div><div class="rev-text">المساعد الذكي ساعدني أقارن بين جهازين وأختار الأفضل لميزانيتي. تجربة رائعة!</div><div class="reviewer"><div class="rev-av">عك</div><div><div class="rev-name">علي الكعبي</div><div class="rev-city">البصرة</div></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA -->
+<div class="cta-wrap">
+  <div class="cta-box">
+    <h2>🔥 لا تفوت العروض!</h2>
+    <p>تسوق الآن واستفد من خصومات حصرية — أو اسأل مساعدنا الذكي</p>
+    <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+      <a href="#products" class="btn-glow">تسوق الآن</a>
+      <a href="#ai-section" class="btn-ghost">🤖 المساعد الذكي</a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand"><h3>عالم المستعمل</h3><p>متجرك الأول للإلكترونيات المستعملة عالية الجودة في البصرة — مدعوم بالذكاء الاصطناعي</p></div>
+    <div class="footer-col"><h4>روابط سريعة</h4><ul><li><a href="#">الرئيسية</a></li><li><a href="#">المتجر</a></li><li><a href="#">من نحن</a></li><li><a href="#">سياسة الإرجاع</a></li></ul></div>
+    <div class="footer-col"><h4>الفئات</h4><ul><li><a href="#">موبايلات</a></li><li><a href="#">لابتوبات</a></li><li><a href="#">سماعات</a></li><li><a href="#">إكسسوارات</a></li></ul></div>
+    <div class="footer-col"><h4>تواصل معنا</h4><ul><li><a href="#">📍 البصرة، العراق</a></li><li><a href="#">📞 07XX-XXX-XXXX</a></li><li><a href="#">✉️ info@alamalmostamal.com</a></li><li><a href="#">💬 واتساب</a></li></ul></div>
+  </div>
+  <div class="footer-bottom">© 2026 عالم المستعمل — جميع الحقوق محفوظة | مدعوم بالذكاء الاصطناعي 🤖</div>
+</footer>
+
+<script>
+let cartCount = 0;
+
+function addCart(btn){
+  cartCount++;
+  document.getElementById('cart-count').textContent = cartCount;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
+}
+
+async function doSearch(){
+  const q = document.getElementById('searchInput').value.trim();
+  if(!q) return;
+  const res = document.getElementById('searchResults');
+  const txt = document.getElementById('searchText');
+  res.classList.add('active');
+  txt.innerHTML = '<span style="color:var(--muted)">🔍 جاري البحث بالذكاء الاصطناعي...</span>';
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:'أنت مساعد تسوق ذكي لمتجر عالم المستعمل للإلكترونيات في البصرة، العراق. المتجر يبيع أجهزة مستعملة مفحوصة. أجب بالعربية بشكل مختصر ومفيد. المنتجات المتاحة: iPhone 13 (550,000 د.ع)، Dell Latitude i5 (380,000 د.ع)، Sony WH-1000XM4 (180,000 د.ع)، Samsung Galaxy S22 (420,000 د.ع)، MacBook Air M1 (750,000 د.ع)، Canon EOS 250D (320,000 د.ع).',
+        messages:[{role:'user',content:q}]
+      })
+    });
+    const d = await r.json();
+    txt.innerHTML = d.content[0].text.replace(/\n/g,'<br/>');
+  }catch(e){
+    txt.innerHTML = '<span style="color:var(--accent2)">⚠️ حدث خطأ في البحث. حاول مرة أخرى.</span>';
+  }
+}
+
+document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
+
+const systemPrompt = `أنت مساعد تسوق ذكي لمتجر "عالم المستعمل" للإلكترونيات المستعملة في البصرة، العراق.
+تحدث بالعربية دائماً. كن ودوداً ومفيداً وموجزاً.
+المنتجات المتاحة حالياً:
+- iPhone 13 128GB: 550,000 دينار (حالة ممتازة)
+- Dell Latitude 5510 i5: 380,000 دينار (حالة جيدة جداً)
+- Sony WH-1000XM4 سماعات: 180,000 دينار (حالة ممتازة)
+- Samsung Galaxy S22: 420,000 دينار (حالة جيدة)
+- MacBook Air M1: 750,000 دينار (حالة ممتازة)
+- Canon EOS 250D كاميرا: 320,000 دينار (حالة جيدة جداً)
+يمكنك مساعدة العميل في الاختيار، المقارنة، ونصائح الشراء. إذا سأل عن شيء خارج نطاق المتجر، اعتذر بلطف.`;
+
+let chatHistory = [];
+
+function addMsg(role, text){
+  const chat = document.getElementById('aiChat');
+  const div = document.createElement('div');
+  div.className = `msg msg-${role==='assistant'?'ai':'user'}`;
+  const now = new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+  div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br/>')}</div><div class="msg-time">${now}</div>`;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function showTyping(){
+  const chat = document.getElementById('aiChat');
+  const div = document.createElement('div');
+  div.className = 'msg msg-ai';div.id = 'typing-indicator';
+  div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+  chat.appendChild(div);chat.scrollTop = chat.scrollHeight;
+}
+
+function removeTyping(){
+  const t = document.getElementById('typing-indicator');
+  if(t) t.remove();
+}
+
+function quickAsk(q){
+  document.getElementById('aiInput').value = q;
+  sendMsg();
+}
+
+async function sendMsg(){
+  const input = document.getElementById('aiInput');
+  const btn = document.getElementById('sendBtn');
+  const msg = input.value.trim();
+  if(!msg || btn.disabled) return;
+  input.value = '';
+  btn.disabled = true;
+  addMsg('user', msg);
+  chatHistory.push({role:'user', content:msg});
+  showTyping();
+  try{
+    const r = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system: systemPrompt,
+        messages: chatHistory
+      })
+    });
+    const d = await r.json();
+    const reply = d.content[0].text;
+    removeTyping();
+    addMsg('assistant', reply);
+    chatHistory.push({role:'assistant', content:reply});
+  }catch(e){
+    removeTyping();
+    addMsg('assistant','عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.');
+  }
+  btn.disabled = false;
+  input.focus();
+}
+</script>
+</body>
+</html>
