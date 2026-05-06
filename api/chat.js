@@ -1,5 +1,15 @@
 export default async function handler(req, res) {
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+    res.status(200).end();
+    return;
+  }
+
   if (req.method !== 'POST') {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
@@ -11,8 +21,7 @@ export default async function handler(req, res) {
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
+        'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
         model: model || 'claude-sonnet-4-20250514',
@@ -23,8 +32,10 @@ export default async function handler(req, res) {
     });
 
     const data = await response.json();
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.status(200).json(data);
   } catch (error) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
     res.status(500).json({ error: 'Internal server error' });
   }
 }
