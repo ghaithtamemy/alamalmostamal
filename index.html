@@ -589,22 +589,104 @@ footer{
 <script>
 let cartCount = 0;
 
+// Helper function to safely get elements
+function safeGet(id){
+  return document.getElementById(id) || null;
+}
+
+// Scroll to section function
+function scrollTo(selector){
+  const el = document.querySelector(selector);
+  if(el) el.scrollIntoView({behavior:'smooth'});
+}
+
+// Navigation click handlers
+function initNavigation(){
+  try{
+    const navLinks = document.querySelectorAll('.nav-links a');
+    navLinks.forEach(link=>{
+      link.addEventListener('click',(e)=>{
+        e.preventDefault();
+        const text = link.textContent.trim();
+        if(text.includes('المتجر')) scrollTo('#products');
+        else if(text.includes('الموبايلات')) scrollTo('.cat');
+        else if(text.includes('اللابتوبات')) scrollTo('.cat');
+      });
+    });
+  }catch(e){
+    console.error('Navigation init error:',e);
+  }
+}
+
+// Category click handlers
+function initCategories(){
+  try{
+    const cats = document.querySelectorAll('.cat');
+    cats.forEach(cat=>{
+      cat.addEventListener('click',(e)=>{
+        e.preventDefault();
+        scrollTo('#products');
+      });
+    });
+  }catch(e){
+    console.error('Category init error:',e);
+  }
+}
+
+// Search input handler
+function initSearch(){
+  try{
+    const searchInput = safeGet('searchInput');
+    if(searchInput){
+      searchInput.addEventListener('keydown',function(e){
+        if(e.key==='Enter') doSearch();
+      });
+    }
+  }catch(e){
+    console.error('Search init error:',e);
+  }
+}
+
+// AI input handler
+function initAIInput(){
+  try{
+    const aiInput = safeGet('aiInput');
+    if(aiInput){
+      aiInput.addEventListener('keydown',function(e){
+        if(e.key==='Enter') sendMsg();
+      });
+    }
+  }catch(e){
+    console.error('AI input init error:',e);
+  }
+}
+
 function addCart(btn){
-  cartCount++;
-  document.getElementById('cart-count').textContent = cartCount;
-  const t = document.getElementById('toast');
-  t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),2500);
+  try{
+    cartCount++;
+    const countEl = safeGet('cart-count');
+    if(countEl) countEl.textContent = cartCount;
+    const t = safeGet('toast');
+    if(t){
+      t.classList.add('show');
+      setTimeout(()=>t.classList.remove('show'),2500);
+    }
+  }catch(e){
+    console.error('Add cart error:',e);
+  }
 }
 
 async function doSearch(){
-  const q = document.getElementById('searchInput').value.trim();
-  if(!q) return;
-  const res = document.getElementById('searchResults');
-  const txt = document.getElementById('searchText');
-  res.classList.add('active');
-  txt.innerHTML = '<span style="color:var(--muted)">🔍 جاري البحث بالذكاء الاصطناعي...</span>';
   try{
+    const searchInput = safeGet('searchInput');
+    if(!searchInput) return;
+    const q = searchInput.value.trim();
+    if(!q) return;
+    const res = safeGet('searchResults');
+    const txt = safeGet('searchText');
+    if(!res || !txt) return;
+    res.classList.add('active');
+    txt.innerHTML = '<span style="color:var(--muted)">🔍 جاري البحث بالذكاء الاصطناعي...</span>';
     const r = await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -618,11 +700,11 @@ async function doSearch(){
     const d = await r.json();
     txt.innerHTML = d.content[0].text.replace(/\n/g,'<br/>');
   }catch(e){
-    txt.innerHTML = '<span style="color:var(--accent2)">⚠️ حدث خطأ في البحث. حاول مرة أخرى.</span>';
+    console.error('Search error:',e);
+    const txt = safeGet('searchText');
+    if(txt) txt.innerHTML = '<span style="color:var(--accent2)">⚠️ حدث خطأ في البحث. حاول مرة أخرى.</span>';
   }
 }
-
-document.getElementById('searchInput').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch()});
 
 const systemPrompt = `أنت مساعد تسوق ذكي لمتجر "عالم المستعمل" للإلكترونيات المستعملة في البصرة، العراق.
 تحدث بالعربية دائماً. كن ودوداً ومفيداً وموجزاً.
@@ -638,44 +720,68 @@ const systemPrompt = `أنت مساعد تسوق ذكي لمتجر "عالم ا�
 let chatHistory = [];
 
 function addMsg(role, text){
-  const chat = document.getElementById('aiChat');
-  const div = document.createElement('div');
-  div.className = `msg msg-${role==='assistant'?'ai':'user'}`;
-  const now = new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
-  div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br/>')}</div><div class="msg-time">${now}</div>`;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+  try{
+    const chat = safeGet('aiChat');
+    if(!chat) return;
+    const div = document.createElement('div');
+    div.className = `msg msg-${role==='assistant'?'ai':'user'}`;
+    const now = new Date().toLocaleTimeString('ar-EG',{hour:'2-digit',minute:'2-digit'});
+    div.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g,'<br/>')}</div><div class="msg-time">${now}</div>`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }catch(e){
+    console.error('Add message error:',e);
+  }
 }
 
 function showTyping(){
-  const chat = document.getElementById('aiChat');
-  const div = document.createElement('div');
-  div.className = 'msg msg-ai';div.id = 'typing-indicator';
-  div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
-  chat.appendChild(div);chat.scrollTop = chat.scrollHeight;
+  try{
+    const chat = safeGet('aiChat');
+    if(!chat) return;
+    const div = document.createElement('div');
+    div.className = 'msg msg-ai';
+    div.id = 'typing-indicator';
+    div.innerHTML = '<div class="typing"><span></span><span></span><span></span></div>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }catch(e){
+    console.error('Show typing error:',e);
+  }
 }
 
 function removeTyping(){
-  const t = document.getElementById('typing-indicator');
-  if(t) t.remove();
+  try{
+    const t = safeGet('typing-indicator');
+    if(t) t.remove();
+  }catch(e){
+    console.error('Remove typing error:',e);
+  }
 }
 
 function quickAsk(q){
-  document.getElementById('aiInput').value = q;
-  sendMsg();
+  try{
+    const aiInput = safeGet('aiInput');
+    if(aiInput){
+      aiInput.value = q;
+      sendMsg();
+    }
+  }catch(e){
+    console.error('Quick ask error:',e);
+  }
 }
 
 async function sendMsg(){
-  const input = document.getElementById('aiInput');
-  const btn = document.getElementById('sendBtn');
-  const msg = input.value.trim();
-  if(!msg || btn.disabled) return;
-  input.value = '';
-  btn.disabled = true;
-  addMsg('user', msg);
-  chatHistory.push({role:'user', content:msg});
-  showTyping();
   try{
+    const input = safeGet('aiInput');
+    const btn = safeGet('sendBtn');
+    if(!input || !btn) return;
+    const msg = input.value.trim();
+    if(!msg || btn.disabled) return;
+    input.value = '';
+    btn.disabled = true;
+    addMsg('user', msg);
+    chatHistory.push({role:'user', content:msg});
+    showTyping();
     const r = await fetch('/api/chat',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -692,11 +798,33 @@ async function sendMsg(){
     addMsg('assistant', reply);
     chatHistory.push({role:'assistant', content:reply});
   }catch(e){
+    console.error('Send message error:',e);
     removeTyping();
     addMsg('assistant','عذراً، حدث خطأ. يرجى المحاولة مرة أخرى.');
   }
-  btn.disabled = false;
-  input.focus();
+  try{
+    const btn = safeGet('sendBtn');
+    if(btn) btn.disabled = false;
+    const input = safeGet('aiInput');
+    if(input) input.focus();
+  }catch(e){
+    console.error('Final step error:',e);
+  }
+}
+
+// Initialize all handlers when DOM is ready
+if(document.readyState==='loading'){
+  document.addEventListener('DOMContentLoaded',function(){
+    initNavigation();
+    initCategories();
+    initSearch();
+    initAIInput();
+  });
+}else{
+  initNavigation();
+  initCategories();
+  initSearch();
+  initAIInput();
 }
 </script>
 </body>
