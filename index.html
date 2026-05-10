@@ -605,9 +605,9 @@ async function doSearch(){
   res.classList.add('active');
   txt.innerHTML = '<span style="color:var(--muted)">🔍 جاري البحث بالذكاء الاصطناعي...</span>';
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
+    const r = await fetch('/api/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
@@ -676,9 +676,9 @@ async function sendMsg(){
   chatHistory.push({role:'user', content:msg});
   showTyping();
   try{
-    const r = await fetch('https://api.anthropic.com/v1/messages',{
+    const r = await fetch('/api/chat',{
       method:'POST',
-      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:'claude-sonnet-4-20250514',
         max_tokens:1000,
